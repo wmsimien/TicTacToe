@@ -68,21 +68,26 @@ const possibleWins = [
 // reset game
 const resetGame = () => {
     P1 = [];
-    P2 = P1;
+    P2 = [];
     isPlayerX = '';
-    isPlayerO = isPlayerX;
+    isPlayerO = '';
     activePlayer = '';
     isPlaying = false;
     p1Btn.style.backgroundColor = '';
     p2Btn.style.backgroundColor = '';
     playResetBtn.textContent = 'Play';
+
+    // reset game board
+    const board = document.querySelectorAll('.square');
+    board.forEach(square => square.textContent = '');
 };
 
 // this function will check player mark against possible wins
-const checkPlayersMarks = (player) => {
+const checkPlayersMarks = (playerMarks, player) => {
+    console.log({checkingMarks: playerMarks.slice('').sort((a,b) => a - b).join('')})
     possibleWins.forEach(arr => {
-        // console.log(arr.slice('').join('').includes(P1.slice('').join('')));
-        if (arr.slice('').join('').includes(player.slice('').join(''))) {
+        if (arr.slice('').join('').includes(playerMarks.slice('').sort((a,b) => a - b).join('')) || 
+            playerMarks.slice('').sort((a,b) => a - b).join('').includes(arr.slice('').join(''))) {
             console.log(`${player} won!`);
             resetGame();
         }
@@ -100,6 +105,20 @@ const setPlayerColor = (player) => {
     }  
 }
 
+// set the player's mark on the game board
+const setPlayerMark = (player, squareLoc, plays) => {
+    // obtain element & set in appropriate player's marked square
+    const markedSquare = document.querySelector(`[id='${squareLoc}']`);
+    // check if marked/played
+    if (markedSquare.textContent.length === 0) {
+        plays.push(squareLoc);
+        markedSquare.textContent = player === isPlayerX ? 'X' : 'O';
+    } else {
+        alert(`This square has already been played.`);
+        return;
+    }
+}
+
 // track player's marked squares
 const trackMarks = (e) => {
     if (!isPlayerX) {
@@ -107,24 +126,27 @@ const trackMarks = (e) => {
         return;
     }
     if (isPlaying) {
+        let squareId = e.target.id;
         switch (activePlayer) {
             case 'p1':
-                P1.push(e.target.id);
-                if (P1.length === 3) checkPlayersMarks(P1);
-                activePlayer = 'p2';
+                // call function to set playere marks and check them
+                setPlayerMark(activePlayer, squareId, P1);
+                if (P1.length >= 3) checkPlayersMarks(P1, activePlayer);
+                if (isPlaying) activePlayer = 'p2';
                 console.log('Player 1 Marks: ', P1);
                 break;
             case 'p2':
-                P2.push(e.target.id);
-                if (P2.length === 3) checkPlayersMarks(P2);
-                activePlayer = 'p1';
+                // 
+                setPlayerMark(activePlayer, squareId, P2);
+                if (P2.length >= 3) checkPlayersMarks(P2, activePlayer);
+                if (isPlaying) activePlayer = 'p1';
                 console.log('Player 2 Marks: ', P2);
                 break;
             default:
                 alert(`No player on the Tic...`)
                 break;
         }
-        setPlayerColor(activePlayer);
+        if (isPlaying) setPlayerColor(activePlayer);
     } 
 };
 
@@ -153,7 +175,7 @@ const drawBoard = () => {
         const squareDivAttrId = document.createAttribute('id');
         squareDivAttrId.value = `${i}`;
         squareDiv.setAttributeNode(squareDivAttrId);
-        squareDiv.textContent = `${i}`;
+        // squareDiv.textContent = `${i}`;
         board.appendChild(squareDiv);
         // add event listener to each square
         squareDiv.addEventListener('click', trackMarks);
@@ -165,19 +187,11 @@ drawBoard();
 
 // listen for who goes first
 p1Btn.addEventListener('click', () => {
-    // set player's button color on
-    // p1Btn.style.backgroundColor = 'red';
-    // p2Btn.style.backgroundColor = '';
-    // setPlayerColor('p1');
     // mark as playerX or playerO
     startPlayer('p1');
 });
 
 p2Btn.addEventListener('click', () => {
-    // set player's button color of
-    // p2Btn.style.backgroundColor = 'purple';
-    // p1Btn.style.backgroundColor = '';
-    // setPlayerColor('p2');
     // mark as playerX or playerO
     startPlayer('p2');
 });

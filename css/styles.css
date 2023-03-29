@@ -1,4 +1,10 @@
 /* add comments throughout file */
+
+:root {
+  --player1-btn-color: red;
+  --player2-btn-color: purple;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -32,8 +38,8 @@ body {
 .board {
     display: grid;
     width: 500px;
-	height: 500px;
-	margin: 0 auto;
+	  height: 500px;
+	  margin: 0 auto;
     background-color: #a8dbb6;  
     color: #fff;
     border: 5px solid #94DAFF;
@@ -88,3 +94,20 @@ body {
     color: #FF0000;
     /* color: #FDB9FC; */
   }
+
+  @media only screen and (min-width: 600px) {
+    body {
+      width: 600px;
+      margin: 0 auto;
+    }
+
+    
+}
+
+@media only screen and (min-width: 800px) {
+    body {
+      width: 700px;
+    }
+  
+ 
+}
