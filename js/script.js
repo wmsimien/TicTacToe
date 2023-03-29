@@ -30,9 +30,18 @@ Potential Extra Tic Tac Toe Features
         Get inventive with your styling e.g. use hover effects or animations
 
  */
-
+// obtain board elememts
 const BOARD_LIMIT = 9;
 const board = document.querySelector('.board');
+// obtain players buttons
+const p1Btn = document.querySelector('#p1');
+const p2Btn = document.querySelector('#p2');
+// obtain play/reset button
+const playResetBtn = document.querySelector('#play-reset');
+
+
+//  track game in play
+let isPlaying = false;
 
 /**
  * check the player that goes first marks first
@@ -43,33 +52,97 @@ const board = document.querySelector('.board');
  * Need to determine player is marking squares
  * check why checkPlayersMarks is coming back at least seven times
  */
+// initialize players
 let P1 = [], P2 = [];
+let isPlayerX = '', isPlayerO = '', activePlayer = '';
+
+
+// initialize and define possible wins
 const possibleWins = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
     [0, 4, 8], [2, 4, 6]
 ];
-// console.log(possibleWins);
-const checkPlayersMarks = () => {
+
+
+// reset game
+const resetGame = () => {
+    P1 = [];
+    P2 = P1;
+    isPlayerX = '';
+    isPlayerO = isPlayerX;
+    activePlayer = '';
+    isPlaying = false;
+    p1Btn.style.backgroundColor = '';
+    p2Btn.style.backgroundColor = '';
+    playResetBtn.textContent = 'Play';
+};
+
+// this function will check player mark against possible wins
+const checkPlayersMarks = (player) => {
     possibleWins.forEach(arr => {
         // console.log(arr.slice('').join('').includes(P1.slice('').join('')));
-        if (arr.slice('').join('').includes(P1.slice('').join(''))) console.log('You won!')
-        P1 = [];
-        P2 = [];
+        if (arr.slice('').join('').includes(player.slice('').join(''))) {
+            console.log(`${player} won!`);
+            resetGame();
+        }
     });
 };
 
+// set player 1 and player 2 default colors
+const setPlayerColor = (player) => {
+    if (player === 'p1') {
+        p1Btn.style.backgroundColor = 'red';
+        p2Btn.style.backgroundColor = '';
+    } else {
+        p2Btn.style.backgroundColor = 'purple';
+        p1Btn.style.backgroundColor = '';
+    }  
+}
 
 // track player's marked squares
 const trackMarks = (e) => {
-    // console.log(e.target.id);
-    // console.log(P1.length);
-    P1.push(e.target.id);
-    if (P1.length === 3) checkPlayersMarks();
-    
+    if (!isPlayerX) {
+        alert(`Please select the first player...`);
+        return;
+    }
+    if (isPlaying) {
+        switch (activePlayer) {
+            case 'p1':
+                P1.push(e.target.id);
+                if (P1.length === 3) checkPlayersMarks(P1);
+                activePlayer = 'p2';
+                console.log('Player 1 Marks: ', P1);
+                break;
+            case 'p2':
+                P2.push(e.target.id);
+                if (P2.length === 3) checkPlayersMarks(P2);
+                activePlayer = 'p1';
+                console.log('Player 2 Marks: ', P2);
+                break;
+            default:
+                alert(`No player on the Tic...`)
+                break;
+        }
+        setPlayerColor(activePlayer);
+    } 
 };
 
-// draw board
+// put active player in play
+const startPlayer = (currPlayer) => {
+    // set game into play mode and playerX and playerO
+    if (isPlaying === false) {
+        isPlaying = true;
+        isPlayerX = currPlayer;
+        isPlayerO = isPlayerX === 'p2' ? 'p1' : 'p2';
+        playResetBtn.textContent = 'Reset';
+        setPlayerColor(isPlayerX);
+    } 
+    // set activePlayer only once per game play
+    if (activePlayer.length === 0) activePlayer = currPlayer;
+};
+
+// draw game board
 const drawBoard = () => {
     for (let i = 0; i < BOARD_LIMIT; i++) {
         const squareDiv = document.createElement('div');
@@ -85,6 +158,42 @@ const drawBoard = () => {
         // add event listener to each square
         squareDiv.addEventListener('click', trackMarks);
     }
-}
+};
+
 // initize and draw game board
 drawBoard();
+
+// listen for who goes first
+p1Btn.addEventListener('click', () => {
+    // set player's button color on
+    // p1Btn.style.backgroundColor = 'red';
+    // p2Btn.style.backgroundColor = '';
+    // setPlayerColor('p1');
+    // mark as playerX or playerO
+    startPlayer('p1');
+});
+
+p2Btn.addEventListener('click', () => {
+    // set player's button color of
+    // p2Btn.style.backgroundColor = 'purple';
+    // p1Btn.style.backgroundColor = '';
+    // setPlayerColor('p2');
+    // mark as playerX or playerO
+    startPlayer('p2');
+});
+
+playResetBtn.addEventListener('click', () => {
+    if (!isPlayerX) {
+        alert(`Please select the first player...`);
+        return;
+    }
+    // toggle play/reset mode
+    isPlaying = !isPlaying;
+    if (isPlaying) {
+        playResetBtn.textContent = 'Reset';
+    } else {
+        playResetBtn.textContent = 'Play';
+        // need to reset gameboard and players
+        resetGame();
+    }
+});

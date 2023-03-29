@@ -1,3 +1,4 @@
+/* add comments throughout file */
 * {
     margin: 0;
     padding: 0;
@@ -50,7 +51,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 4px 4px 15px rgb(216, 187, 187);
+    box-shadow: 4px 4px 15px rgb(216, 187, 187);  /* add comments */
   }
 
   .square:hover {
