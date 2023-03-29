@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    /* background: #F6F7C1; */
+    background: rgb(237, 221, 221);
+    margin: 16px;
+}
+
+.header {
+    color: whitesmoke;
+    margin: 10px;
+    text-align: center;
+    /* min-height: 100px; */
+    background-image: linear-gradient(to right, #C400FF, #FF67E7 30%, #0CECDD);
+    border-top: 4px solid dimgray;
+    border-bottom: 4px solid dimgray;
+    /* overflow: hidden; */
+}
+
+.players {
+    /* min-height: 100px; */
+
+    padding: 20px 0;
+}
+
+.board {
+    display: grid;
+    width: 500px;
+	height: 500px;
+	margin: 0 auto;
+    background-color: #a8dbb6;  
+    color: #fff;
+    border: 5px solid #94DAFF;
+    border-radius: 10px;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+.square {
+
+    border: 6px outset #B983FF;
+    border-radius: 1px;
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 4px 4px 15px rgb(216, 187, 187);
+  }
+
+  .square:hover {
+    cursor: pointer;
+    background: #D1FFF3 ;
+  }
+
+  button {
+    text-align: center;
+    margin: 20px auto;
+    padding: 20px 40px;
+    display: block;
+    cursor: pointer;
+    
+    /* float:left; */
+  }
+
+  button:hover {
+    color: whitesmoke;
+    background-color: green;
+  }
+
+  /* .occupied:hover {
+    background: #ff3a3a;
+  } */
+
+  .footer {
+    flex: 0 0 90px; /* don't grow or shrink just stay at this height */
+    padding: 10px;
+    /* min-height: 100px; */
+    text-align: center;
+    /* bottom: 0; */
+    /* background: initial; */
+    color: #FF0000;
+    /* color: #FDB9FC; */
+  }
