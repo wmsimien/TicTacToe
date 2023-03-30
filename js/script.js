@@ -62,6 +62,10 @@ let playerTwoWins = 0, playerTwoLoses = 0;
 let playerTie = 0;
 let playsCount = 0;
 let errDisplayed = false;
+// obtain game status elements
+const playerOneStats = document.querySelector("#p1-wins");
+const playerTwoStats = document.querySelector("#p2-wins");
+const drawStats = document.querySelector("#draws");
 
 // initialize and define possible wins
 const possibleWins = [
@@ -97,6 +101,7 @@ const alertMessage = (type, forWhom) => {
             break;
         case 'D':
             alert(`Looks like this will be a Tie/Draw!`);
+            playerTie++;
             break;
         case 'Played':
             alert(`This square has already been played.`);
@@ -111,38 +116,27 @@ const alertMessage = (type, forWhom) => {
 };
 
 const gameWinDrawLose = (player, status) => {
-    if (player === 'p1') {
-        playerOneWins++;
-        playerTwoLoses++;
+    if (status !== 'D') {
+        if (player === 'p1') {
+            alertMessage('W', 'Player 1');  
+        } else {
+            alertMessage('W', 'Player 2');
+        }
+     
+        if (player === 'p1') {
+            playerOneWins++;
+            playerTwoLoses++;
+        } else if (player === 'p2') {
+            playerTwoWins++;
+            playerOneLoses++;
+        }
+        playerOneStats.textContent = `Player 1 Stats: Wins ${playerOneWins} Loses: ${playerOneLoses}`;
+        playerTwoStats.textContent = `Player 2 Stats: Wins ${playerTwoWins} Loses: ${playerTwoLoses}`;
     } else {
-        playerTwoWins++;
-        playerOneLoses++;
-
+        if (playerTie > 0) drawStats.textContent = `Tie Count is: ${playerTie}`;
     }
-    switch (status) {
-        case 'W':
-            if (player === 'p1') {
-                alertMessage('W', 'Player 1');  
-            } else {
-                alertMessage('W', 'Player 2');
-            }
-            break;
-        case 'L':
-            break;
-        case 'D':
-            break;
-        default:
-            break;
-    }
-    
-    console.log({'playerOneWins': playerOneWins});
-    console.log({'playerOneloses' : playerOneLoses});
-    console.log({'playerTwoWins' : playerTwoWins});
-    console.log({'playerTwoLoses' : playerTwoLoses});
-    console.log({'playsCount' : playsCount})
     // reset for another game
     resetGame();
-    console.log(isPlaying);
 };
 
 // this function will check player mark against possible wins
@@ -155,8 +149,10 @@ const checkPlayersMarks = (playerMarks, player) => {
             gameWinDrawLose(player, 'W');
         } else {
             // need to check if lose for other player or tie (playerTie get's this one)
-            if (playsCount === 9) console.log(`this may be a draw/tie`)
-
+            if (playsCount === 9) {
+                alertMessage('D', '');
+                gameWinDrawLose('tie', 'D');
+            }
         }
     });
 };
@@ -182,9 +178,7 @@ const setPlayerMark = (player, squareLoc, plays) => {
         markedSquare.textContent = player === isPlayerX ? 'X' : 'O';
         playsCount++;  // increment the plays counter
     } else {
-        // alert(`${player}, This square has already been played.`);
         alertMessage('Played', player);
-        // return;
     }
 };
 
