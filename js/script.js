@@ -30,8 +30,12 @@ Potential Extra Tic Tac Toe Features
         Get inventive with your styling e.g. use hover effects or animations
 
  */
-// obtain board elememts
+// define and set variables
 const BOARD_LIMIT = 9;
+const player1BtnColor = '#FDB9FC';
+const player2BtnColor = '#77ACF1';
+
+// obtain board elememts
 const board = document.querySelector('.board');
 // obtain players buttons
 const p1Btn = document.querySelector('#p1');
@@ -97,10 +101,10 @@ const checkPlayersMarks = (playerMarks, player) => {
 // set player 1 and player 2 default colors
 const setPlayerColor = (player) => {
     if (player === 'p1') {
-        p1Btn.style.backgroundColor = 'red';
+        p1Btn.style.backgroundColor = player1BtnColor;
         p2Btn.style.backgroundColor = '';
     } else {
-        p2Btn.style.backgroundColor = 'purple';
+        p2Btn.style.backgroundColor = player2BtnColor;
         p1Btn.style.backgroundColor = '';
     }  
 }
