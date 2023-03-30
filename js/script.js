@@ -44,7 +44,7 @@ const p2Btn = document.querySelector('#p2');
 // obtain play/reset button
 const playResetBtn = document.querySelector('#play-reset');
 // track game in play
-let isPlaying = false;
+let isPlaying = false, reset = false;
 // initialize players
 let P1 = [], P2 = [];
 let isPlayerX = '', isPlayerO = '', activePlayer = '';
@@ -58,6 +58,8 @@ let errDisplayed = false;
 const playerOneStats = document.querySelector("#p1-wins");
 const playerTwoStats = document.querySelector("#p2-wins");
 const drawStats = document.querySelector("#draws");
+// obtain display message element
+const messageEl = document.querySelector('#message');
 
 // initialize and define possible wins
 const possibleWins = [
@@ -74,42 +76,49 @@ const replay = () => {
     isPlayerO = '';
     activePlayer = '';
     isPlaying = false;
+    reset = true;
     playsCount = 0;
     p1Btn.style.backgroundColor = '';
     p2Btn.style.backgroundColor = '';
-    playResetBtn.textContent = 'Play';
 };
 
 // reset game
 const resetGame = () => {
     // set for play
     replay();
+    reset = false;
     // reset game board
     const board = document.querySelectorAll('.square');
     board.forEach(square => square.textContent = '');
+    playResetBtn.textContent = 'Play';
 };
 
 // handle error messages
 const alertMessage = (type, forWhom) => {
+    let messageText = '';
     switch (type) {
         case 'W':
-            alert(`${forWhom} has WON!`);
+            messageText = `${forWhom} has WON!`;
             break;
         case 'D':
-            alert(`Looks like this will be a Tie/Draw!`);
+            messageText = `Looks like this will be a Tie/Draw!`;
             playerTie++;
             break;
         case 'Played':
-            alert(`This square has already been played.`);
+            if (reset === true) {
+                messageText = `Please reset the board to play again.`;
+            } else {
+                messageText = `This square has already been played.`;
+            }
             errDisplayed = !errDisplayed;
             break;
         case 'First':
-            alert(`Please select the first player before beginning to play game.`);
-            // playResetBtn.textContent = '';
+            if (!reset) messageText = 'Please select the first player before beginning to play game.';
+
         default:
             break;
     }
-
+    messageEl.textContent = messageText;
 };
 
 const gameWinDrawLose = (player, status) => {
@@ -133,7 +142,7 @@ const gameWinDrawLose = (player, status) => {
         if (playerTie > 0) drawStats.textContent = `Tie Count is: ${playerTie}`;
     }
     // reset for another game
-    resetGame();
+    replay();
 };
 
 // this function will check player mark against possible wins
@@ -201,7 +210,6 @@ const trackMarks = (e) => {
                 errDisplayed = false;
                 break;
             default:
-                alert(`No player on the Tic...`)
                 break;
         }
         // game in play; call function to set next player's button w/ color indicator
@@ -211,12 +219,14 @@ const trackMarks = (e) => {
 
 // put active player in play
 const startPlayer = (currPlayer) => {
+    // clear message; if any
+    if (messageEl.textContent.length > 0) messageEl.textContent = '';
     // set game into play mode and playerX and playerO
-    if (isPlaying === false) {
+    if (isPlaying === false && reset === false) {
         isPlaying = true;
         isPlayerX = currPlayer;
         isPlayerO = isPlayerX === 'p2' ? 'p1' : 'p2';
-        if (isPlayerX) playResetBtn.textContent = 'Reset';
+        playResetBtn.textContent = 'Reset';
         setPlayerColor(isPlayerX);
     } 
     // set activePlayer only once per game play
@@ -255,13 +265,14 @@ p2Btn.addEventListener('click', () => {
 });
 // listen for game mode
 playResetBtn.addEventListener('click', () => {
+    // if (messageEl.textContent.length > 0) messageEl.textContent = '';
+    messageEl.textContent = '';
     if (!isPlayerX) alertMessage('First', '');
     // toggle play/reset mode
     if (isPlayerX) isPlaying = !isPlaying;
     if (isPlaying) {
         playResetBtn.textContent = 'Reset';
     } else {
-        playResetBtn.textContent = 'Play';
         // need to reset gameboard and players
         resetGame();
     }

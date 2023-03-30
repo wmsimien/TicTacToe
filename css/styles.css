@@ -29,11 +29,20 @@ body {
 .header {
   color: whitesmoke;
   margin: 10px;
-  margin-bottom: 80px;
+  margin-bottom: 50px;
   text-align: center;
   background-image: linear-gradient(to right, #C400FF, #FF67E7 30%, #0CECDD);
   border-top: 4px solid var(--border-dim-color);
   border-bottom: 4px solid var(--border-dim-color);
+}
+
+#message {
+  color:rgb(203, 18, 18);
+  margin-bottom: 20px;
+  width: 500px;
+  height: 20px;
+  /* font-size: medium; */
+  font-weight: 500;
 }
 
 .board {
@@ -80,50 +89,17 @@ body {
 
 button {
   justify-content: center;
-  /* display: inline-block; */
-  /* float: */
-  /* text-align: center;
-  margin: 0 auto; */
-  /* margin-right: 20px; */
   margin-left: 20px;
-  /* height: 40px;
-  width: 90px; */
-  /* padding: 0 40px 0 15px; */
   padding: .3rem 1.75rem;
   border-radius: 12px;
   cursor: pointer;
-  /* border-top-right-radius: 5px; */
-  /* border-bottom-right-radius: 5px; */
 } 
 
-/* .player-2 { */
-  /* display: inline-block; */
-  /* text-align: center; */
-  /* cursor: pointer; */
-  /* margin-left: 50px; */
-  /* margin: 20px auto; */
-  /* padding: 20px 40px; */
-  /* padding: 1.75rem 3.5rem; */
-
-  /* border-top-right-radius: 15px; */
-  /* border-bottom-right-radius: 15px; */
-/* } */
 
 button:hover {
   color: whitesmoke;
   background-color: var(--button-hover);
 }
-
-/* #play-reset {
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 1.75rem 3.5rem;
-  /* margin: 5rem 2rem; */
-  /* border: none; */
-  /* background-color: #fff; */
-  /* color: #444; */
-  /* border-radius: 10rem; */
-/* }  */
 
 #play-reset:hover {
   color: rgb(200, 97, 97);
@@ -134,7 +110,6 @@ button:hover {
 .game-status {
   display: flex;
   margin: 0 auto;
-  /* width: 50%; */
   justify-content: center;
 
 }
