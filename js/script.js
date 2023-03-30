@@ -31,15 +31,7 @@ Potential Extra Tic Tac Toe Features
         Get inventive with your styling e.g. use hover effects or animations
 
  */
-/**
- ************************************************************* Today's ToDos
-                            1. Create tracking feature for each player's wins, loses, and draws
-                            2. Create a function for all the aler messages
-                            3. Determine how the game status will be displayed
-                            4. Draw definition:  When all 9 squares are full, 
-                                the game is over. If no player has 3 marks in a row, 
-                                the game ends in a tie.
- **********************************************************************************/
+
 // define and set variables
 const BOARD_LIMIT = 9;
 const player1BtnColor = '#FDB9FC';
@@ -76,7 +68,6 @@ const possibleWins = [
 
 // reset game
 const resetGame = () => {
-    console.log('resetting game...')
     P1 = [];
     P2 = [];
     isPlayerX = '';
@@ -141,11 +132,8 @@ const gameWinDrawLose = (player, status) => {
 
 // this function will check player mark against possible wins
 const checkPlayersMarks = (playerMarks, player) => {
-    console.log({checkingMarks: playerMarks.slice('').sort((a,b) => a - b).join('')});
     possibleWins.forEach(arr => {
-        console.log({arr: arr.slice('').join('')});
-        if (arr.slice('').join('').includes(playerMarks.slice('').sort((a,b) => a - b).join('')) || 
-            playerMarks.slice('').sort((a,b) => a - b).join('').includes(arr.slice('').join(''))) {
+        if (arr.every((num) => playerMarks.sort((a,b) => a - b).includes(num))) {
             gameWinDrawLose(player, 'W');
         } else {
             // need to check if lose for other player or tie (playerTie get's this one)
@@ -174,7 +162,8 @@ const setPlayerMark = (player, squareLoc, plays) => {
     const markedSquare = document.querySelector(`[id='${squareLoc}']`);
     // check if marked/played
     if (markedSquare.textContent.length === 0) {
-        plays.push(squareLoc);
+        // console.log(Number(squareLoc))
+        plays.push(Number(squareLoc));
         markedSquare.textContent = player === isPlayerX ? 'X' : 'O';
         playsCount++;  // increment the plays counter
     } else {
