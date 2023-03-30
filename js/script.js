@@ -66,8 +66,8 @@ const possibleWins = [
     [0, 4, 8], [2, 4, 6]
 ];
 
-// reset game
-const resetGame = () => {
+// setup for play
+const replay = () => {
     P1 = [];
     P2 = [];
     isPlayerX = '';
@@ -78,7 +78,12 @@ const resetGame = () => {
     p1Btn.style.backgroundColor = '';
     p2Btn.style.backgroundColor = '';
     playResetBtn.textContent = 'Play';
+};
 
+// reset game
+const resetGame = () => {
+    // set for play
+    replay();
     // reset game board
     const board = document.querySelectorAll('.square');
     board.forEach(square => square.textContent = '');
@@ -100,6 +105,7 @@ const alertMessage = (type, forWhom) => {
             break;
         case 'First':
             alert(`Please select the first player before beginning to play game.`);
+            // playResetBtn.textContent = '';
         default:
             break;
     }
@@ -132,17 +138,20 @@ const gameWinDrawLose = (player, status) => {
 
 // this function will check player mark against possible wins
 const checkPlayersMarks = (playerMarks, player) => {
+    let winner = false;
     possibleWins.forEach(arr => {
         if (arr.every((num) => playerMarks.sort((a,b) => a - b).includes(num))) {
+            winner = true;
             gameWinDrawLose(player, 'W');
-        } else {
-            // need to check if lose for other player or tie (playerTie get's this one)
-            if (playsCount === 9) {
-                alertMessage('D', '');
-                gameWinDrawLose('tie', 'D');
-            }
-        }
+        } 
     });
+    // need to check if lose for other player or tie (playerTie get's this one)
+    if (!winner) {
+        if (playsCount === BOARD_LIMIT) {
+            alertMessage('D', '');
+            gameWinDrawLose('tie', 'D');
+        }
+    }
 };
 
 // set player 1 and player 2 default colors
@@ -162,7 +171,6 @@ const setPlayerMark = (player, squareLoc, plays) => {
     const markedSquare = document.querySelector(`[id='${squareLoc}']`);
     // check if marked/played
     if (markedSquare.textContent.length === 0) {
-        // console.log(Number(squareLoc))
         plays.push(Number(squareLoc));
         markedSquare.textContent = player === isPlayerX ? 'X' : 'O';
         playsCount++;  // increment the plays counter
@@ -208,7 +216,7 @@ const startPlayer = (currPlayer) => {
         isPlaying = true;
         isPlayerX = currPlayer;
         isPlayerO = isPlayerX === 'p2' ? 'p1' : 'p2';
-        playResetBtn.textContent = 'Reset';
+        if (isPlayerX) playResetBtn.textContent = 'Reset';
         setPlayerColor(isPlayerX);
     } 
     // set activePlayer only once per game play
@@ -249,7 +257,7 @@ p2Btn.addEventListener('click', () => {
 playResetBtn.addEventListener('click', () => {
     if (!isPlayerX) alertMessage('First', '');
     // toggle play/reset mode
-    isPlaying = !isPlaying;
+    if (isPlayerX) isPlaying = !isPlaying;
     if (isPlaying) {
         playResetBtn.textContent = 'Reset';
     } else {
