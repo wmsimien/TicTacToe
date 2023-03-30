@@ -23,18 +23,27 @@ User Stories
 Potential Extra Tic Tac Toe Features
         Keep track of multiple game rounds with a win, lose and tie counter
         Allow players to customize their tokens (X, O, name, picture, etc)
-        Use localStorage to persist data locally to allow games to continue after page refresh or loss of internet connectivity
+        Use localStorage to persist data locally to allow games to continue after page refresh or loss of 
+            internet connectivity
         Involve Audio in your game
         Create an AI opponent: teach JavaScript to play an unbeatable game against you
         Make your site fully responsive so that it is playable from a mobile phone
         Get inventive with your styling e.g. use hover effects or animations
 
  */
+/**
+ ************************************************************* Today's ToDos
+                            1. Create tracking feature for each player's wins, loses, and draws
+                            2. Create a function for all the aler messages
+                            3. Determine how the game status will be displayed
+                            4. Draw definition:  When all 9 squares are full, 
+                                the game is over. If no player has 3 marks in a row, 
+                                the game ends in a tie.
+ **********************************************************************************/
 // define and set variables
 const BOARD_LIMIT = 9;
 const player1BtnColor = '#FDB9FC';
 const player2BtnColor = '#77ACF1';
-
 // obtain board elememts
 const board = document.querySelector('.board');
 // obtain players buttons
@@ -42,24 +51,17 @@ const p1Btn = document.querySelector('#p1');
 const p2Btn = document.querySelector('#p2');
 // obtain play/reset button
 const playResetBtn = document.querySelector('#play-reset');
-
-
-//  track game in play
+// track game in play
 let isPlaying = false;
-
-/**
- * check the player that goes first marks first
- * only when they have picked three
- * if no availabe squares to pick (which needs to be determined/tracked)
- * this will signify a 'draw'
- * 
- * Need to determine player is marking squares
- * check why checkPlayersMarks is coming back at least seven times
- */
 // initialize players
 let P1 = [], P2 = [];
 let isPlayerX = '', isPlayerO = '', activePlayer = '';
-
+// track player's wins and draws count
+let playerOneWins = 0, playerOneLoses = 0;
+let playerTwoWins = 0, playerTwoLoses = 0;
+let playerTie = 0;
+let playsCount = 0;
+let errDisplayed = false;
 
 // initialize and define possible wins
 const possibleWins = [
@@ -68,15 +70,16 @@ const possibleWins = [
     [0, 4, 8], [2, 4, 6]
 ];
 
-
 // reset game
 const resetGame = () => {
+    console.log('resetting game...')
     P1 = [];
     P2 = [];
     isPlayerX = '';
     isPlayerO = '';
     activePlayer = '';
     isPlaying = false;
+    playsCount = 0;
     p1Btn.style.backgroundColor = '';
     p2Btn.style.backgroundColor = '';
     playResetBtn.textContent = 'Play';
@@ -86,14 +89,74 @@ const resetGame = () => {
     board.forEach(square => square.textContent = '');
 };
 
+// handle error messages
+const alertMessage = (type, forWhom) => {
+    switch (type) {
+        case 'W':
+            alert(`${forWhom} has WON!`);
+            break;
+        case 'D':
+            alert(`Looks like this will be a Tie/Draw!`);
+            break;
+        case 'Played':
+            alert(`This square has already been played.`);
+            errDisplayed = !errDisplayed;
+            break;
+        case 'First':
+            alert(`Please select the first player before beginning to play game.`);
+        default:
+            break;
+    }
+
+};
+
+const gameWinDrawLose = (player, status) => {
+    if (player === 'p1') {
+        playerOneWins++;
+        playerTwoLoses++;
+    } else {
+        playerTwoWins++;
+        playerOneLoses++;
+
+    }
+    switch (status) {
+        case 'W':
+            if (player === 'p1') {
+                alertMessage('W', 'Player 1');  
+            } else {
+                alertMessage('W', 'Player 2');
+            }
+            break;
+        case 'L':
+            break;
+        case 'D':
+            break;
+        default:
+            break;
+    }
+    
+    console.log({'playerOneWins': playerOneWins});
+    console.log({'playerOneloses' : playerOneLoses});
+    console.log({'playerTwoWins' : playerTwoWins});
+    console.log({'playerTwoLoses' : playerTwoLoses});
+    console.log({'playsCount' : playsCount})
+    // reset for another game
+    resetGame();
+    console.log(isPlaying);
+};
+
 // this function will check player mark against possible wins
 const checkPlayersMarks = (playerMarks, player) => {
-    console.log({checkingMarks: playerMarks.slice('').sort((a,b) => a - b).join('')})
+    console.log({checkingMarks: playerMarks.slice('').sort((a,b) => a - b).join('')});
     possibleWins.forEach(arr => {
+        console.log({arr: arr.slice('').join('')});
         if (arr.slice('').join('').includes(playerMarks.slice('').sort((a,b) => a - b).join('')) || 
             playerMarks.slice('').sort((a,b) => a - b).join('').includes(arr.slice('').join(''))) {
-            console.log(`${player} won!`);
-            resetGame();
+            gameWinDrawLose(player, 'W');
+        } else {
+            // need to check if lose for other player or tie (playerTie get's this one)
+            if (playsCount === 9) console.log(`this may be a draw/tie`)
+
         }
     });
 };
@@ -117,39 +180,40 @@ const setPlayerMark = (player, squareLoc, plays) => {
     if (markedSquare.textContent.length === 0) {
         plays.push(squareLoc);
         markedSquare.textContent = player === isPlayerX ? 'X' : 'O';
+        playsCount++;  // increment the plays counter
     } else {
-        alert(`This square has already been played.`);
-        return;
+        // alert(`${player}, This square has already been played.`);
+        alertMessage('Played', player);
+        // return;
     }
-}
+};
 
 // track player's marked squares
 const trackMarks = (e) => {
-    if (!isPlayerX) {
-        alert(`Please select the first player...`);
-        return;
-    }
+    if (!isPlayerX) alertMessage('First', '');
+    
     if (isPlaying) {
         let squareId = e.target.id;
         switch (activePlayer) {
             case 'p1':
-                // call function to set playere marks and check them
+                // call function to set player's marks and check them
                 setPlayerMark(activePlayer, squareId, P1);
                 if (P1.length >= 3) checkPlayersMarks(P1, activePlayer);
-                if (isPlaying) activePlayer = 'p2';
-                console.log('Player 1 Marks: ', P1);
+                if (isPlaying && !errDisplayed) activePlayer = 'p2';
+                errDisplayed = false;
                 break;
             case 'p2':
-                // 
+                // call function to set player's marks and check them
                 setPlayerMark(activePlayer, squareId, P2);
                 if (P2.length >= 3) checkPlayersMarks(P2, activePlayer);
-                if (isPlaying) activePlayer = 'p1';
-                console.log('Player 2 Marks: ', P2);
+                if (isPlaying && !errDisplayed) activePlayer = 'p1';
+                errDisplayed = false;
                 break;
             default:
                 alert(`No player on the Tic...`)
                 break;
         }
+        // game in play; call function to set next player's button w/ color indicator
         if (isPlaying) setPlayerColor(activePlayer);
     } 
 };
@@ -179,14 +243,13 @@ const drawBoard = () => {
         const squareDivAttrId = document.createAttribute('id');
         squareDivAttrId.value = `${i}`;
         squareDiv.setAttributeNode(squareDivAttrId);
-        // squareDiv.textContent = `${i}`;
         board.appendChild(squareDiv);
         // add event listener to each square
         squareDiv.addEventListener('click', trackMarks);
     }
 };
 
-// initize and draw game board
+// call function to initize and draw game board
 drawBoard();
 
 // listen for who goes first
@@ -199,12 +262,9 @@ p2Btn.addEventListener('click', () => {
     // mark as playerX or playerO
     startPlayer('p2');
 });
-
+// listen for game mode
 playResetBtn.addEventListener('click', () => {
-    if (!isPlayerX) {
-        alert(`Please select the first player...`);
-        return;
-    }
+    if (!isPlayerX) alertMessage('First', '');
     // toggle play/reset mode
     isPlaying = !isPlaying;
     if (isPlaying) {
