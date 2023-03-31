@@ -120,6 +120,15 @@ button:hover {
   display: inline-block;
   margin-right: 56px;
   width: 100px;
+  margin-top: 10px;
+}
+
+#p1-wins {
+  margin-left: 90px;
+}
+
+#p2-wins {
+  margin-right: 45px;
 }
 
 .footer {

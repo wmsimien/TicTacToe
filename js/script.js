@@ -80,12 +80,18 @@ const alertMessage = (type, forWhom) => {
             errDisplayed = !errDisplayed;
             break;
         case 'First':
-            if (!reset) messageText = 'Please select the first player before beginning to play game.';
-
+            messageEl.style.fontSize = '18px';
+            messageText = 'Please select the first player before beginning to play game.';
+            break;
+        case 'Reset': {
+            messageEl.style.fontSize = '18px';
+            messageText = `Please reset the board to play again.`;
+            break;
+        }
         default:
             break;
     }
-    messageEl.textContent = messageText;
+    if (messageText.length > 0) messageEl.textContent = messageText;
 };
 
 const gameWinDrawLose = (player, status) => {
@@ -158,8 +164,14 @@ const setPlayerMark = (player, squareLoc, plays) => {
 
 // track player's marked squares
 const trackMarks = (e) => {
-    if (!isPlayerX) alertMessage('First', '');
-    
+    if (!isPlayerX) {
+        if (reset) {
+            alertMessage('Reset', '');
+        } else {
+            alertMessage('First', '');
+        }
+    }  
+    // playing...
     if (isPlaying) {
         let squareId = e.target.id;
         switch (activePlayer) {
@@ -181,7 +193,7 @@ const trackMarks = (e) => {
                 break;
         }
         // game in play; call function to set next player's button w/ color indicator
-        if (isPlaying) setPlayerColor(activePlayer);
+        setPlayerColor(activePlayer);
     } 
 };
 
@@ -234,10 +246,9 @@ p2Btn.addEventListener('click', () => {
 });
 // listen for game mode
 playResetBtn.addEventListener('click', () => {
-    // if (messageEl.textContent.length > 0) messageEl.textContent = '';
-    messageEl.textContent = '';
+    if (messageEl.textContent.length > 0) messageEl.textContent = '';
     messageEl.style.fontSize = '18px';
-    if (!isPlayerX) alertMessage('First', '');
+    if (!isPlayerX && !reset) alertMessage('First', '');
     // toggle play/reset mode
     if (isPlayerX) isPlaying = !isPlaying;
     if (isPlaying) {
