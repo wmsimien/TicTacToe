@@ -36,12 +36,19 @@ body {
   border-bottom: 4px solid var(--border-dim-color);
 }
 
+section {
+  display: flex;
+  justify-content: center;
+}
+
 #message {
   color:rgb(203, 18, 18);
   margin-bottom: 20px;
   width: 500px;
   height: 20px;
   font-weight: 500;
+  font-size: 18px;
+  align-content: center;
 }
 
 .board {

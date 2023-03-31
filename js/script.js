@@ -65,6 +65,7 @@ const alertMessage = (type, forWhom) => {
     switch (type) {
         case 'W':
             messageText = `${forWhom} has WON!`;
+             messageEl.style.fontSize = '30px';
             break;
         case 'D':
             messageText = `Looks like this will be a Tie/Draw!`;
@@ -188,6 +189,7 @@ const trackMarks = (e) => {
 const startPlayer = (currPlayer) => {
     // clear message; if any
     if (messageEl.textContent.length > 0) messageEl.textContent = '';
+    messageEl.style.fontSize = '18px';
     // set game into play mode and playerX and playerO
     if (isPlaying === false && reset === false) {
         isPlaying = true;
@@ -234,6 +236,7 @@ p2Btn.addEventListener('click', () => {
 playResetBtn.addEventListener('click', () => {
     // if (messageEl.textContent.length > 0) messageEl.textContent = '';
     messageEl.textContent = '';
+    messageEl.style.fontSize = '18px';
     if (!isPlayerX) alertMessage('First', '');
     // toggle play/reset mode
     if (isPlayerX) isPlaying = !isPlaying;
