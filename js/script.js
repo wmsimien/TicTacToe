@@ -68,7 +68,7 @@ const alertMessage = (type, forWhom) => {
              messageEl.style.fontSize = '30px';
             break;
         case 'D':
-            messageText = `Looks like this will be a Tie/Draw!`;
+            messageText = `It's a Tie!`;
             playerTie++;
             break;
         case 'Played':
@@ -103,10 +103,10 @@ const gameWinDrawLose = (player, status) => {
             playerTwoWins++;
             playerOneLoses++;
         }
-        playerOneStats.textContent = `Player 1 Stats: Wins ${playerOneWins} Loses: ${playerOneLoses}`;
-        playerTwoStats.textContent = `Player 2 Stats: Wins ${playerTwoWins} Loses: ${playerTwoLoses}`;
+        playerOneStats.textContent = `Player 1 Wins: ${playerOneWins} Loses: ${playerOneLoses}`;
+        playerTwoStats.textContent = `Player 2 Wins: ${playerTwoWins} Loses: ${playerTwoLoses}`;
     } else {
-        if (playerTie > 0) drawStats.textContent = `Tie Count is: ${playerTie}`;
+        if (playerTie > 0) drawStats.textContent = `Ties: ${playerTie}`;
     }
     // reset for another game
     replay();
