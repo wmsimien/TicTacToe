@@ -139,19 +139,15 @@ button:hover {
   color: var(--footer-color);
 }
 
+@media only screen and (min-width: 480px) {
+  .board {
+    width: 100%;
+  }
+}
+
 @media only screen and (min-width: 600px) {
     body {
       width: 600px;
       margin: 0 auto;
   }  
-}
-
-@media only screen and (min-width: 300px) {
-  body {
-    width: 380px;
-    margin: 0 auto;
-  }
-  .header {
-    margin-left: 80px;
-  }
 }
