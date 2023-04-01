@@ -11,7 +11,7 @@
 
   ## Setup/Installation
   1.  Clone this repository to your desktop.
-  1.  Navigate to index.html and open in your browser.  The application can, also, be ran by clicking the application's GitHub link, .
+  1.  Navigate to index.html and open in your browser.  The application can, also, be ran by clicking the application's GitHub link, https://wmsimien.github.io/TicTacToe/.
 
 
   ## Usage  
@@ -34,9 +34,8 @@
   ## Credits
     Wanda Avery
   
-  ## Questions
-  Send all questions/comments to:
-  | GitHub: wmsimien https://github.com/wmsimien                                  
- |--------------------------------------------------------------------------------
- | Email:  wanda.avery@att.net                                                              
+  ## Fun Level
+  Great project w/ a high level of fun for all levels of developers.
+
+                                                           
   
