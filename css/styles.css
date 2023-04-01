@@ -141,7 +141,7 @@ button:hover {
 
 @media only screen and (min-width: 480px) {
   .board {
-    width: 100%;
+    width: 90%;
   }
 }
 
@@ -150,4 +150,7 @@ button:hover {
       width: 600px;
       margin: 0 auto;
   }  
+  .board {
+    width: 100%;
+  }
 }
