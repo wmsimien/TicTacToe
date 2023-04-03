@@ -2,24 +2,30 @@
 const BOARD_LIMIT = 9;
 const player1BtnColor = '#FDB9FC';
 const player2BtnColor = '#77ACF1';
+
 // obtain board elememts
 const board = document.querySelector('.board');
+
 // obtain players buttons
 const p1Btn = document.querySelector('#p1');
 const p2Btn = document.querySelector('#p2');
+
 // obtain play/reset button
 const playResetBtn = document.querySelector('#play-reset');
 // track game in play
 let isPlaying = false, reset = false;
+
 // initialize players
 let P1 = [], P2 = [];
 let isPlayerX = '', isPlayerO = '', activePlayer = '';
+
 // track player's wins and draws count
 let playerOneWins = 0, playerOneLoses = 0;
 let playerTwoWins = 0, playerTwoLoses = 0;
 let playerTie = 0;
 let playsCount = 0;
 let errDisplayed = false;
+
 // obtain game status elements
 const playerOneStats = document.querySelector("#p1-wins");
 const playerTwoStats = document.querySelector("#p2-wins");
@@ -94,6 +100,7 @@ const alertMessage = (type, forWhom) => {
     if (messageText.length > 0) messageEl.textContent = messageText;
 };
 
+// decide game
 const gameWinDrawLose = (player, status) => {
     if (status !== 'D') {
         if (player === 'p1') {
@@ -164,6 +171,9 @@ const setPlayerMark = (player, squareLoc, plays) => {
 
 // track player's marked squares
 const trackMarks = (e) => {
+    // prevent default action
+    e.preventDefault();
+    // perform check; reset or choice player who goes first
     if (!isPlayerX) {
         if (reset) {
             alertMessage('Reset', '');
@@ -239,11 +249,11 @@ p1Btn.addEventListener('click', () => {
     // mark as playerX or playerO
     startPlayer('p1');
 });
-
 p2Btn.addEventListener('click', () => {
     // mark as playerX or playerO
     startPlayer('p2');
 });
+
 // listen for game mode
 playResetBtn.addEventListener('click', () => {
     if (messageEl.textContent.length > 0) messageEl.textContent = '';
